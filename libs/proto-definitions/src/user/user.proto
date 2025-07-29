@@ -1,0 +1,50 @@
+syntax = "proto3";
+
+package user; // Tên package cho các định nghĩa trong file này
+
+// Định nghĩa dịch vụ User Service
+service UserService {
+  rpc GetUserById (GetUserByIdRequest) returns (User);
+  rpc CreateUser (CreateUserRequest) returns (User);
+  rpc UpdateUser (UpdateUserRequest) returns (User);
+  rpc DeleteUser (DeleteUserRequest) returns (DeleteUserResponse);
+}
+
+// Định nghĩa tin nhắn (message) cho User
+message User {
+  string id = 1;
+  string username = 2;
+  string email = 3;
+  string createdAt = 4;
+  string updatedAt = 5;
+}
+
+// Định nghĩa tin nhắn yêu cầu GetUserById
+message GetUserByIdRequest {
+  string id = 1;
+}
+
+// Định nghĩa tin nhắn yêu cầu CreateUser
+message CreateUserRequest {
+  string username = 1;
+  string email = 2;
+  string password = 3; // Mật khẩu sẽ được hash ở backend
+}
+
+// Định nghĩa tin nhắn yêu cầu UpdateUser
+message UpdateUserRequest {
+  string id = 1;
+  optional string username = 2; // optional cho phép trường này không bắt buộc
+  optional string email = 3;
+}
+
+// Định nghĩa tin nhắn yêu cầu DeleteUser
+message DeleteUserRequest {
+  string id = 1;
+}
+
+// Định nghĩa tin nhắn phản hồi DeleteUser
+message DeleteUserResponse {
+  bool success = 1;
+  string message = 2;
+}

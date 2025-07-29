@@ -1,0 +1,28 @@
+Client (Web/Mobile)
+       |
+       |  (GraphQL)
+       V
++-------------------+
+|   API Gateway     |  (NestJS)
+| (GraphQL Server)  |
++-------------------+
+       |  (gRPC / REST)
+       V
++-------------------+      +-------------------+      +-------------------+
+| User Service      | <--> | Ticket Service    | <--> | Booking Service   |
+| (NestJS)          |      | (Golang - gRPC)   |      | (NestJS - gRPC)   |
++-------------------+      +-------------------+      +-------------------+
+       ^                                 |
+       |  (gRPC / REST)                  | (Kafka Event: "booking-requested")
+       |                                 V
++-------------------+            +-------------------+
+| Payment Service   | <--------> | Kafka Broker      |
+| (NestJS/Golang)   |            +-------------------+
++-------------------+            ^      ^      ^
+       ^                         |      |      |
+       | (Kafka Event: "payment-succeeded")
+       |                         |      |      |
++-------------------+      +-------------------+      +-------------------+
+| Notification      | <----| Ticket Update     | <----| Payment Status    |
+| Service (Go)      |      | Worker (NestJS)   |      | Checker (NestJS/Go)|
++-------------------+      +-------------------+      +-------------------+
