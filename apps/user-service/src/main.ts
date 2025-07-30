@@ -4,20 +4,25 @@ import { MicroserviceOptions, Transport } from '@nestjs/microservices';
 import { join } from 'path';
 
 async function bootstrap() {
+  const protoPathResolved = join(
+    process.cwd(),
+    'libs',
+    'proto-definitions',
+    'src',
+    'user',
+    'user.proto',
+  );
+  console.log(
+    `[DEBUG] User Service protoPath resolved to: ${protoPathResolved}`,
+  ); // <--- THÊM DÒNG NÀY
+
   const app = await NestFactory.createMicroservice<MicroserviceOptions>(
     AppModule,
     {
       transport: Transport.GRPC,
       options: {
         package: 'user',
-        protoPath: join(
-          __dirname,
-          '..',
-          '..',
-          '..',
-          'libs',
-          'proto-definitions',
-        ),
+        protoPath: protoPathResolved,
         url: 'localhost:50051',
       },
     },

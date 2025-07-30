@@ -7,10 +7,10 @@ import {
   UpdateUserRequest,
   DeleteUserRequest,
   DeleteUserResponse,
-} from '@app/proto-definitions/generated/user';
+} from '@app/proto-definitions/generated/user/user';
 
 @Injectable()
-export class UserService {
+export class UserController {
   private users: User[] = []; // Dữ liệu giả định
 
   constructor() {
@@ -32,13 +32,12 @@ export class UserService {
   }
 
   @GrpcMethod('UserService', 'GetUserById')
-  getUserById(data: GetUserByIdRequest): User | null {
+  getUserById(data: GetUserByIdRequest): User {
     console.log('GetUserById called with ID:', data.id);
     const user = this.users.find((u) => u.id === data.id);
     if (!user) {
-      // Trong môi trường thực tế, bạn sẽ trả về lỗi gRPC
-      console.warn(`User with ID ${data.id} not found.`);
-      return null;
+      // Throw an error for gRPC to handle properly
+      throw new Error(`User with ID ${data.id} not found.`);
     }
     return user;
   }
@@ -58,12 +57,11 @@ export class UserService {
   }
 
   @GrpcMethod('UserService', 'UpdateUser')
-  updateUser(data: UpdateUserRequest): User | null {
+  updateUser(data: UpdateUserRequest): User {
     console.log('UpdateUser called with data:', data);
     const index = this.users.findIndex((u) => u.id === data.id);
     if (index === -1) {
-      console.warn(`User with ID ${data.id} not found for update.`);
-      return null;
+      throw new Error(`User with ID ${data.id} not found for update.`);
     }
     const updatedUser = { ...this.users[index] };
     if (data.username) {
