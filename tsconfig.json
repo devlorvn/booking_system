@@ -29,6 +29,12 @@
       ],
       "@app/proto-definitions/*": [
         "libs/proto-definitions/src/*"
+      ],
+      "@app/proto-definitions/generated": [
+        "libs/proto-definitions/src/generated/src"
+      ],
+      "@app/proto-definitions/generated/*": [
+        "libs/proto-definitions/src/generated/src/*"
       ]
     }
   }

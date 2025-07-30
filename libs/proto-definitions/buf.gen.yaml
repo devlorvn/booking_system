@@ -1,0 +1,12 @@
+version: v1
+plugins:
+  - plugin: ts_proto # Tên plugin mà Buf sẽ gọi (protoc-gen-ts_proto)
+    out: ./src/generated # Thư mục đầu ra cho code TypeScript
+    opt: # Các tùy chọn được truyền cho ts-proto
+      - nestJs=true
+      - addGrpcMetadata=true
+      - env=node
+      - useDate=false
+      - snakeToCamel=false
+      - outputClientImpl=true
+      - outputServices=grpc-js
