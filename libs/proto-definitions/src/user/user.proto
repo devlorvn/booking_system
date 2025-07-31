@@ -2,11 +2,15 @@ syntax = "proto3";
 
 package user; // Tên package cho các định nghĩa trong file này
 
+// --- THÊM DÒNG NÀY ---
+option go_package = "booking-system/ticket-service/proto/user;user";
+// --- KẾT THÚC THÊM ---
+
 // Định nghĩa dịch vụ User Service
 service UserService {
-  rpc GetUserById (GetUserByIdRequest) returns (User);
-  rpc CreateUser (CreateUserRequest) returns (User);
-  rpc UpdateUser (UpdateUserRequest) returns (User);
+  rpc GetUserById (GetUserByIdRequest) returns (GetUserByIdResponse);
+  rpc CreateUser (CreateUserRequest) returns (CreateUserResponse);
+  rpc UpdateUser (UpdateUserRequest) returns (UpdateUserResponse);
   rpc DeleteUser (DeleteUserRequest) returns (DeleteUserResponse);
 }
 
@@ -15,13 +19,18 @@ message User {
   string id = 1;
   string username = 2;
   string email = 3;
-  string createdAt = 4;
-  string updatedAt = 5;
+  string created_at = 4;
+  string updated_at = 5;
 }
 
 // Định nghĩa tin nhắn yêu cầu GetUserById
 message GetUserByIdRequest {
   string id = 1;
+}
+
+// Định nghĩa tin nhắn phản hồi GetUserById
+message GetUserByIdResponse {
+  User user = 1;
 }
 
 // Định nghĩa tin nhắn yêu cầu CreateUser
@@ -31,11 +40,21 @@ message CreateUserRequest {
   string password = 3; // Mật khẩu sẽ được hash ở backend
 }
 
+// Định nghĩa tin nhắn phản hồi CreateUser
+message CreateUserResponse {
+  User user = 1;
+}
+
 // Định nghĩa tin nhắn yêu cầu UpdateUser
 message UpdateUserRequest {
   string id = 1;
   optional string username = 2; // optional cho phép trường này không bắt buộc
   optional string email = 3;
+}
+
+// Định nghĩa tin nhắn phản hồi UpdateUser
+message UpdateUserResponse {
+  User user = 1;
 }
 
 // Định nghĩa tin nhắn yêu cầu DeleteUser

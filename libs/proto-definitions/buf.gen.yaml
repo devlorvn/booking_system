@@ -1,8 +1,8 @@
 version: v1
 plugins:
-  - plugin: ts_proto # Tên plugin mà Buf sẽ gọi (protoc-gen-ts_proto)
+  - plugin: ts_proto # Plugin cho TypeScript (NestJS)
     out: ./src/generated # Thư mục đầu ra cho code TypeScript
-    opt: # Các tùy chọn được truyền cho ts-proto
+    opt:
       - nestJs=true
       - addGrpcMetadata=true
       - env=node
@@ -10,3 +10,12 @@ plugins:
       - snakeToCamel=false
       - outputClientImpl=true
       - outputServices=grpc-js
+  - plugin: go # Plugin cho Go (protoc-gen-go)
+    out: ../../apps/ticket-service/proto # Thư mục đầu ra cho code Go trong ticket-service
+    opt:
+      - paths=source_relative # Giữ cấu trúc thư mục tương đối
+  - plugin: go-grpc # Plugin cho Go gRPC (protoc-gen-go-grpc)
+    out: ../../apps/ticket-service/proto # Thư mục đầu ra cho code Go trong ticket-service
+    opt:
+      - paths=source_relative
+      - require_unimplemented_servers=false # Tùy chọn để tránh lỗi khi chưa triển khai tất cả phương thức

@@ -1,0 +1,4 @@
+version: v1
+directories:
+  - libs/proto-definitions
+  - apps/ticket-service/proto 

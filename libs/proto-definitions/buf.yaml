@@ -2,6 +2,11 @@ version: v1
 breaking:
   use:
     - FILE
+  except:
+    - PACKAGE
 lint:
   use:
     - DEFAULT
+  except:
+    - PACKAGE_DIRECTORY_MATCH
+    - PACKAGE_VERSION_SUFFIX

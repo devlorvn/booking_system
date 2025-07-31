@@ -18,7 +18,16 @@
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./apps/api-gateway/test/jest-e2e.json",
-    "proto:generate": "npx buf generate libs/proto-definitions"
+    "proto:generate": "cd libs/proto-definitions && buf generate",
+    "proto:lint": "cd libs/proto-definitions && buf lint",
+    "proto:format": "cd libs/proto-definitions && buf format -w",
+    "proto:breaking": "cd libs/proto-definitions && buf breaking --against '.git#branch=main'",
+    "proto:validate": "npm run proto:lint && npm run proto:format && npm run proto:breaking && npm run proto:generate",
+    "proto:clean": "rm -rf libs/proto-definitions/src/generated && rm -rf apps/ticket-service/proto",
+    "build:go": "cd apps/ticket-service && go build -v ./...",
+    "build:ts": "npm run build",
+    "build:all": "npm run proto:generate && npm run build && npm run build:go",
+    "dev:setup": "npm install && cd apps/ticket-service && go mod tidy && npm run proto:generate"
   },
   "dependencies": {
     "@grpc/grpc-js": "^1.13.4",

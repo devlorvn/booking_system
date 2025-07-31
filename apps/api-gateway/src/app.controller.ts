@@ -2,7 +2,7 @@ import { Controller, Get, Inject, OnModuleInit, Param } from '@nestjs/common';
 import { AppService } from './app.service';
 import { ClientGrpc } from '@nestjs/microservices';
 import {
-  User,
+  GetUserByIdResponse,
   UserServiceClient,
 } from '@app/proto-definitions/generated/user/user';
 import { Observable } from 'rxjs';
@@ -25,7 +25,7 @@ export class AppController implements OnModuleInit {
   }
 
   @Get('user/:id')
-  getUserById(@Param('id') id: string): Observable<User> {
+  getUserById(@Param('id') id: string): Observable<GetUserByIdResponse> {
     console.log(`API Gateway: Calling GetUserById for ID: ${id}`);
     return this.userService.getUserById({ id });
   }

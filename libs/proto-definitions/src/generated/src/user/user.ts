@@ -28,13 +28,18 @@ export interface User {
   id: string;
   username: string;
   email: string;
-  createdAt: string;
-  updatedAt: string;
+  created_at: string;
+  updated_at: string;
 }
 
 /** Định nghĩa tin nhắn yêu cầu GetUserById */
 export interface GetUserByIdRequest {
   id: string;
+}
+
+/** Định nghĩa tin nhắn phản hồi GetUserById */
+export interface GetUserByIdResponse {
+  user: User | undefined;
 }
 
 /** Định nghĩa tin nhắn yêu cầu CreateUser */
@@ -45,12 +50,22 @@ export interface CreateUserRequest {
   password: string;
 }
 
+/** Định nghĩa tin nhắn phản hồi CreateUser */
+export interface CreateUserResponse {
+  user: User | undefined;
+}
+
 /** Định nghĩa tin nhắn yêu cầu UpdateUser */
 export interface UpdateUserRequest {
   id: string;
   /** optional cho phép trường này không bắt buộc */
   username?: string | undefined;
   email?: string | undefined;
+}
+
+/** Định nghĩa tin nhắn phản hồi UpdateUser */
+export interface UpdateUserResponse {
+  user: User | undefined;
 }
 
 /** Định nghĩa tin nhắn yêu cầu DeleteUser */
@@ -67,7 +82,7 @@ export interface DeleteUserResponse {
 export const USER_PACKAGE_NAME = "user";
 
 function createBaseUser(): User {
-  return { id: "", username: "", email: "", createdAt: "", updatedAt: "" };
+  return { id: "", username: "", email: "", created_at: "", updated_at: "" };
 }
 
 export const User: MessageFns<User> = {
@@ -81,11 +96,11 @@ export const User: MessageFns<User> = {
     if (message.email !== "") {
       writer.uint32(26).string(message.email);
     }
-    if (message.createdAt !== "") {
-      writer.uint32(34).string(message.createdAt);
+    if (message.created_at !== "") {
+      writer.uint32(34).string(message.created_at);
     }
-    if (message.updatedAt !== "") {
-      writer.uint32(42).string(message.updatedAt);
+    if (message.updated_at !== "") {
+      writer.uint32(42).string(message.updated_at);
     }
     return writer;
   },
@@ -126,7 +141,7 @@ export const User: MessageFns<User> = {
             break;
           }
 
-          message.createdAt = reader.string();
+          message.created_at = reader.string();
           continue;
         }
         case 5: {
@@ -134,7 +149,7 @@ export const User: MessageFns<User> = {
             break;
           }
 
-          message.updatedAt = reader.string();
+          message.updated_at = reader.string();
           continue;
         }
       }
@@ -172,6 +187,43 @@ export const GetUserByIdRequest: MessageFns<GetUserByIdRequest> = {
           }
 
           message.id = reader.string();
+          continue;
+        }
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+};
+
+function createBaseGetUserByIdResponse(): GetUserByIdResponse {
+  return { user: undefined };
+}
+
+export const GetUserByIdResponse: MessageFns<GetUserByIdResponse> = {
+  encode(message: GetUserByIdResponse, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.user !== undefined) {
+      User.encode(message.user, writer.uint32(10).fork()).join();
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): GetUserByIdResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    const end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseGetUserByIdResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1: {
+          if (tag !== 10) {
+            break;
+          }
+
+          message.user = User.decode(reader, reader.uint32());
           continue;
         }
       }
@@ -243,6 +295,43 @@ export const CreateUserRequest: MessageFns<CreateUserRequest> = {
   },
 };
 
+function createBaseCreateUserResponse(): CreateUserResponse {
+  return { user: undefined };
+}
+
+export const CreateUserResponse: MessageFns<CreateUserResponse> = {
+  encode(message: CreateUserResponse, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.user !== undefined) {
+      User.encode(message.user, writer.uint32(10).fork()).join();
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): CreateUserResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    const end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseCreateUserResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1: {
+          if (tag !== 10) {
+            break;
+          }
+
+          message.user = User.decode(reader, reader.uint32());
+          continue;
+        }
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+};
+
 function createBaseUpdateUserRequest(): UpdateUserRequest {
   return { id: "" };
 }
@@ -290,6 +379,43 @@ export const UpdateUserRequest: MessageFns<UpdateUserRequest> = {
           }
 
           message.email = reader.string();
+          continue;
+        }
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+};
+
+function createBaseUpdateUserResponse(): UpdateUserResponse {
+  return { user: undefined };
+}
+
+export const UpdateUserResponse: MessageFns<UpdateUserResponse> = {
+  encode(message: UpdateUserResponse, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.user !== undefined) {
+      User.encode(message.user, writer.uint32(10).fork()).join();
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): UpdateUserResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    const end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseUpdateUserResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1: {
+          if (tag !== 10) {
+            break;
+          }
+
+          message.user = User.decode(reader, reader.uint32());
           continue;
         }
       }
@@ -390,11 +516,11 @@ export const DeleteUserResponse: MessageFns<DeleteUserResponse> = {
 /** Định nghĩa dịch vụ User Service */
 
 export interface UserServiceClient {
-  getUserById(request: GetUserByIdRequest, metadata?: Metadata): Observable<User>;
+  getUserById(request: GetUserByIdRequest, metadata?: Metadata): Observable<GetUserByIdResponse>;
 
-  createUser(request: CreateUserRequest, metadata?: Metadata): Observable<User>;
+  createUser(request: CreateUserRequest, metadata?: Metadata): Observable<CreateUserResponse>;
 
-  updateUser(request: UpdateUserRequest, metadata?: Metadata): Observable<User>;
+  updateUser(request: UpdateUserRequest, metadata?: Metadata): Observable<UpdateUserResponse>;
 
   deleteUser(request: DeleteUserRequest, metadata?: Metadata): Observable<DeleteUserResponse>;
 }
@@ -402,11 +528,20 @@ export interface UserServiceClient {
 /** Định nghĩa dịch vụ User Service */
 
 export interface UserServiceController {
-  getUserById(request: GetUserByIdRequest, metadata?: Metadata): Promise<User> | Observable<User> | User;
+  getUserById(
+    request: GetUserByIdRequest,
+    metadata?: Metadata,
+  ): Promise<GetUserByIdResponse> | Observable<GetUserByIdResponse> | GetUserByIdResponse;
 
-  createUser(request: CreateUserRequest, metadata?: Metadata): Promise<User> | Observable<User> | User;
+  createUser(
+    request: CreateUserRequest,
+    metadata?: Metadata,
+  ): Promise<CreateUserResponse> | Observable<CreateUserResponse> | CreateUserResponse;
 
-  updateUser(request: UpdateUserRequest, metadata?: Metadata): Promise<User> | Observable<User> | User;
+  updateUser(
+    request: UpdateUserRequest,
+    metadata?: Metadata,
+  ): Promise<UpdateUserResponse> | Observable<UpdateUserResponse> | UpdateUserResponse;
 
   deleteUser(
     request: DeleteUserRequest,
@@ -440,8 +575,8 @@ export const UserServiceService = {
     responseStream: false,
     requestSerialize: (value: GetUserByIdRequest): Buffer => Buffer.from(GetUserByIdRequest.encode(value).finish()),
     requestDeserialize: (value: Buffer): GetUserByIdRequest => GetUserByIdRequest.decode(value),
-    responseSerialize: (value: User): Buffer => Buffer.from(User.encode(value).finish()),
-    responseDeserialize: (value: Buffer): User => User.decode(value),
+    responseSerialize: (value: GetUserByIdResponse): Buffer => Buffer.from(GetUserByIdResponse.encode(value).finish()),
+    responseDeserialize: (value: Buffer): GetUserByIdResponse => GetUserByIdResponse.decode(value),
   },
   createUser: {
     path: "/user.UserService/CreateUser",
@@ -449,8 +584,8 @@ export const UserServiceService = {
     responseStream: false,
     requestSerialize: (value: CreateUserRequest): Buffer => Buffer.from(CreateUserRequest.encode(value).finish()),
     requestDeserialize: (value: Buffer): CreateUserRequest => CreateUserRequest.decode(value),
-    responseSerialize: (value: User): Buffer => Buffer.from(User.encode(value).finish()),
-    responseDeserialize: (value: Buffer): User => User.decode(value),
+    responseSerialize: (value: CreateUserResponse): Buffer => Buffer.from(CreateUserResponse.encode(value).finish()),
+    responseDeserialize: (value: Buffer): CreateUserResponse => CreateUserResponse.decode(value),
   },
   updateUser: {
     path: "/user.UserService/UpdateUser",
@@ -458,8 +593,8 @@ export const UserServiceService = {
     responseStream: false,
     requestSerialize: (value: UpdateUserRequest): Buffer => Buffer.from(UpdateUserRequest.encode(value).finish()),
     requestDeserialize: (value: Buffer): UpdateUserRequest => UpdateUserRequest.decode(value),
-    responseSerialize: (value: User): Buffer => Buffer.from(User.encode(value).finish()),
-    responseDeserialize: (value: Buffer): User => User.decode(value),
+    responseSerialize: (value: UpdateUserResponse): Buffer => Buffer.from(UpdateUserResponse.encode(value).finish()),
+    responseDeserialize: (value: Buffer): UpdateUserResponse => UpdateUserResponse.decode(value),
   },
   deleteUser: {
     path: "/user.UserService/DeleteUser",
@@ -473,57 +608,57 @@ export const UserServiceService = {
 } as const;
 
 export interface UserServiceServer extends UntypedServiceImplementation {
-  getUserById: handleUnaryCall<GetUserByIdRequest, User>;
-  createUser: handleUnaryCall<CreateUserRequest, User>;
-  updateUser: handleUnaryCall<UpdateUserRequest, User>;
+  getUserById: handleUnaryCall<GetUserByIdRequest, GetUserByIdResponse>;
+  createUser: handleUnaryCall<CreateUserRequest, CreateUserResponse>;
+  updateUser: handleUnaryCall<UpdateUserRequest, UpdateUserResponse>;
   deleteUser: handleUnaryCall<DeleteUserRequest, DeleteUserResponse>;
 }
 
 export interface UserServiceClient extends Client {
   getUserById(
     request: GetUserByIdRequest,
-    callback: (error: ServiceError | null, response: User) => void,
+    callback: (error: ServiceError | null, response: GetUserByIdResponse) => void,
   ): ClientUnaryCall;
   getUserById(
     request: GetUserByIdRequest,
     metadata: Metadata,
-    callback: (error: ServiceError | null, response: User) => void,
+    callback: (error: ServiceError | null, response: GetUserByIdResponse) => void,
   ): ClientUnaryCall;
   getUserById(
     request: GetUserByIdRequest,
     metadata: Metadata,
     options: Partial<CallOptions>,
-    callback: (error: ServiceError | null, response: User) => void,
+    callback: (error: ServiceError | null, response: GetUserByIdResponse) => void,
   ): ClientUnaryCall;
   createUser(
     request: CreateUserRequest,
-    callback: (error: ServiceError | null, response: User) => void,
+    callback: (error: ServiceError | null, response: CreateUserResponse) => void,
   ): ClientUnaryCall;
   createUser(
     request: CreateUserRequest,
     metadata: Metadata,
-    callback: (error: ServiceError | null, response: User) => void,
+    callback: (error: ServiceError | null, response: CreateUserResponse) => void,
   ): ClientUnaryCall;
   createUser(
     request: CreateUserRequest,
     metadata: Metadata,
     options: Partial<CallOptions>,
-    callback: (error: ServiceError | null, response: User) => void,
+    callback: (error: ServiceError | null, response: CreateUserResponse) => void,
   ): ClientUnaryCall;
   updateUser(
     request: UpdateUserRequest,
-    callback: (error: ServiceError | null, response: User) => void,
+    callback: (error: ServiceError | null, response: UpdateUserResponse) => void,
   ): ClientUnaryCall;
   updateUser(
     request: UpdateUserRequest,
     metadata: Metadata,
-    callback: (error: ServiceError | null, response: User) => void,
+    callback: (error: ServiceError | null, response: UpdateUserResponse) => void,
   ): ClientUnaryCall;
   updateUser(
     request: UpdateUserRequest,
     metadata: Metadata,
     options: Partial<CallOptions>,
-    callback: (error: ServiceError | null, response: User) => void,
+    callback: (error: ServiceError | null, response: UpdateUserResponse) => void,
   ): ClientUnaryCall;
   deleteUser(
     request: DeleteUserRequest,

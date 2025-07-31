@@ -1,0 +1,23 @@
+version: v1
+lint:
+  use:
+    - DEFAULT
+  except:
+    - PACKAGE_DIRECTORY_MATCH
+    - PACKAGE_VERSION_SUFFIX
+  rpc_allow_google_protobuf_empty_requests: true
+  rpc_allow_google_protobuf_empty_responses: true
+  service_suffix: Service
+  message_suffix: ""
+  enum_zero_value_suffix: UNSPECIFIED
+  enum_value_upper_snake_case: true
+  field_lower_snake_case: true
+  oneof_lower_snake_case: true
+  enum_lower_snake_case: true
+  service_lower_snake_case: true
+  rpc_lower_snake_case: true
+  message_lower_snake_case: true
+  file_lower_snake_case: true
+  package_lower_snake_case: true
+  out_dir_lower_snake_case: true
+  import_lower_snake_case: true 
