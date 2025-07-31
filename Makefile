@@ -86,6 +86,8 @@ dev-setup:
 	npm install
 	cd apps/ticket-service && go mod tidy
 	proto-generate
+	@echo "📦 Setting up database..."
+	@echo "Please run: ./scripts/setup-db.sh (Linux/Mac) or .\\scripts\\setup-db.ps1 (Windows)"
 	@echo "✅ Development environment ready!"
 
 # Quick proto update (most common workflow)

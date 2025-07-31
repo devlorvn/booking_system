@@ -2,8 +2,10 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { MicroserviceOptions, Transport } from '@nestjs/microservices';
 import { join } from 'path';
+import { initializeTransactionalContext } from 'typeorm-transactional';
 
 async function bootstrap() {
+  initializeTransactionalContext();
   const protoPathResolved = join(
     process.cwd(),
     'libs',
@@ -12,10 +14,6 @@ async function bootstrap() {
     'user',
     'user.proto',
   );
-  console.log(
-    `[DEBUG] User Service protoPath resolved to: ${protoPathResolved}`,
-  ); // <--- THÊM DÒNG NÀY
-
   const app = await NestFactory.createMicroservice<MicroserviceOptions>(
     AppModule,
     {
@@ -27,7 +25,11 @@ async function bootstrap() {
       },
     },
   );
+
   await app.listen();
-  console.log('User service (gRPC) is listening on port 50051');
+  console.log(
+    'User service (gRPC) is listening on port',
+    process.env.USER_SERVICE_PORT,
+  );
 }
 bootstrap();

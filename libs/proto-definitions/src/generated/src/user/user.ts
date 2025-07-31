@@ -28,8 +28,8 @@ export interface User {
   id: string;
   username: string;
   email: string;
-  created_at: string;
-  updated_at: string;
+  createdAt: string;
+  updatedAt: string;
 }
 
 /** Định nghĩa tin nhắn yêu cầu GetUserById */
@@ -82,7 +82,7 @@ export interface DeleteUserResponse {
 export const USER_PACKAGE_NAME = "user";
 
 function createBaseUser(): User {
-  return { id: "", username: "", email: "", created_at: "", updated_at: "" };
+  return { id: "", username: "", email: "", createdAt: "", updatedAt: "" };
 }
 
 export const User: MessageFns<User> = {
@@ -96,11 +96,11 @@ export const User: MessageFns<User> = {
     if (message.email !== "") {
       writer.uint32(26).string(message.email);
     }
-    if (message.created_at !== "") {
-      writer.uint32(34).string(message.created_at);
+    if (message.createdAt !== "") {
+      writer.uint32(34).string(message.createdAt);
     }
-    if (message.updated_at !== "") {
-      writer.uint32(42).string(message.updated_at);
+    if (message.updatedAt !== "") {
+      writer.uint32(42).string(message.updatedAt);
     }
     return writer;
   },
@@ -141,7 +141,7 @@ export const User: MessageFns<User> = {
             break;
           }
 
-          message.created_at = reader.string();
+          message.createdAt = reader.string();
           continue;
         }
         case 5: {
@@ -149,7 +149,7 @@ export const User: MessageFns<User> = {
             break;
           }
 
-          message.updated_at = reader.string();
+          message.updatedAt = reader.string();
           continue;
         }
       }

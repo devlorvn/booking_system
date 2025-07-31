@@ -1,0 +1,32 @@
+version: '3.8'
+
+services:
+  postgres_db:
+    image: postgres:16 # Use a specific version, e.g., postgres:16
+    container_name: postgres_db
+    restart: always
+    environment:
+      POSTGRES_USER: myuser
+      POSTGRES_PASSWORD: mypassword
+      POSTGRES_DB: mydatabase
+    volumes:
+      - postgres_data:/var/lib/postgresql/data # Mount a named volume for data persistence
+      # Optional: Mount an init script for initial database setup
+      # - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    ports:
+      - "5432:5432" # Map container port 5432 to host port 5432
+
+  redis:
+    container_name: redis
+    image: redis:7.4-alpine
+    restart: always
+    ports:
+      - '6379:6379'
+    volumes:
+      - redis:/data
+    command: redis-server --save 60 1 --loglevel warning --requirepass 123456 # Command to start Redis with persistence, logging, and a password
+
+volumes:
+  postgres_data:
+    driver: local # Define the named volume
+  redis:

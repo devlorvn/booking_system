@@ -6,7 +6,6 @@ package user; // Tên package cho các định nghĩa trong file này
 option go_package = "booking-system/ticket-service/proto/user;user";
 // --- KẾT THÚC THÊM ---
 
-// Định nghĩa dịch vụ User Service
 service UserService {
   rpc GetUserById (GetUserByIdRequest) returns (GetUserByIdResponse);
   rpc CreateUser (CreateUserRequest) returns (CreateUserResponse);
@@ -14,55 +13,46 @@ service UserService {
   rpc DeleteUser (DeleteUserRequest) returns (DeleteUserResponse);
 }
 
-// Định nghĩa tin nhắn (message) cho User
 message User {
   string id = 1;
   string username = 2;
   string email = 3;
-  string created_at = 4;
-  string updated_at = 5;
+  string createdAt = 4;
+  string updatedAt = 5;
 }
 
-// Định nghĩa tin nhắn yêu cầu GetUserById
 message GetUserByIdRequest {
   string id = 1;
 }
 
-// Định nghĩa tin nhắn phản hồi GetUserById
 message GetUserByIdResponse {
   User user = 1;
 }
 
-// Định nghĩa tin nhắn yêu cầu CreateUser
 message CreateUserRequest {
   string username = 1;
   string email = 2;
-  string password = 3; // Mật khẩu sẽ được hash ở backend
+  string password = 3;
 }
 
-// Định nghĩa tin nhắn phản hồi CreateUser
 message CreateUserResponse {
   User user = 1;
 }
 
-// Định nghĩa tin nhắn yêu cầu UpdateUser
 message UpdateUserRequest {
   string id = 1;
-  optional string username = 2; // optional cho phép trường này không bắt buộc
+  optional string username = 2;
   optional string email = 3;
 }
 
-// Định nghĩa tin nhắn phản hồi UpdateUser
 message UpdateUserResponse {
   User user = 1;
 }
 
-// Định nghĩa tin nhắn yêu cầu DeleteUser
 message DeleteUserRequest {
   string id = 1;
 }
 
-// Định nghĩa tin nhắn phản hồi DeleteUser
 message DeleteUserResponse {
   bool success = 1;
   string message = 2;

@@ -27,8 +27,8 @@ type User struct {
 	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
 	Username      string                 `protobuf:"bytes,2,opt,name=username,proto3" json:"username,omitempty"`
 	Email         string                 `protobuf:"bytes,3,opt,name=email,proto3" json:"email,omitempty"`
-	CreatedAt     string                 `protobuf:"bytes,4,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`
-	UpdatedAt     string                 `protobuf:"bytes,5,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty"`
+	CreatedAt     string                 `protobuf:"bytes,4,opt,name=createdAt,proto3" json:"createdAt,omitempty"`
+	UpdatedAt     string                 `protobuf:"bytes,5,opt,name=updatedAt,proto3" json:"updatedAt,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -502,15 +502,13 @@ var File_src_user_user_proto protoreflect.FileDescriptor
 
 const file_src_user_user_proto_rawDesc = "" +
 	"\n" +
-	"\x13src/user/user.proto\x12\x04user\"\x86\x01\n" +
+	"\x13src/user/user.proto\x12\x04user\"\x84\x01\n" +
 	"\x04User\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12\x1a\n" +
 	"\busername\x18\x02 \x01(\tR\busername\x12\x14\n" +
-	"\x05email\x18\x03 \x01(\tR\x05email\x12\x1d\n" +
-	"\n" +
-	"created_at\x18\x04 \x01(\tR\tcreatedAt\x12\x1d\n" +
-	"\n" +
-	"updated_at\x18\x05 \x01(\tR\tupdatedAt\"$\n" +
+	"\x05email\x18\x03 \x01(\tR\x05email\x12\x1c\n" +
+	"\tcreatedAt\x18\x04 \x01(\tR\tcreatedAt\x12\x1c\n" +
+	"\tupdatedAt\x18\x05 \x01(\tR\tupdatedAt\"$\n" +
 	"\x12GetUserByIdRequest\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\"5\n" +
 	"\x13GetUserByIdResponse\x12\x1e\n" +

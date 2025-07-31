@@ -2,7 +2,7 @@
   "name": "booking-system",
   "version": "0.0.1",
   "description": "Scalable and High-Performance Booking System",
-  "author": "Your Name/Team",
+  "author": "Devlorvn",
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
@@ -27,18 +27,26 @@
     "build:go": "cd apps/ticket-service && go build -v ./...",
     "build:ts": "npm run build",
     "build:all": "npm run proto:generate && npm run build && npm run build:go",
-    "dev:setup": "npm install && cd apps/ticket-service && go mod tidy && npm run proto:generate"
+    "dev:setup": "npm install && cd apps/ticket-service && go mod tidy && npm run proto:generate && npm run db:setup",
+    "db:setup": "node -e \"console.log('Please run: ./scripts/setup-db.sh (Linux/Mac) or .\\scripts\\setup-db.ps1 (Windows)')\""
   },
   "dependencies": {
     "@grpc/grpc-js": "^1.13.4",
     "@grpc/proto-loader": "^0.8.0",
     "@nestjs/common": "^10.0.0",
+    "@nestjs/config": "^4.0.2",
     "@nestjs/core": "^10.0.0",
     "@nestjs/mapped-types": "*",
     "@nestjs/microservices": "^10.3.2",
     "@nestjs/platform-express": "^10.0.0",
+    "@nestjs/typeorm": "^11.0.0",
+    "bcrypt": "^6.0.0",
+    "joi": "^17.13.3",
+    "pg": "^8.16.3",
     "reflect-metadata": "^0.2.0",
-    "rxjs": "^7.8.1"
+    "rxjs": "^7.8.1",
+    "typeorm": "^0.3.25",
+    "typeorm-transactional": "^0.5.0"
   },
   "devDependencies": {
     "@nestjs/cli": "^10.0.0",

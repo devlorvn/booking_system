@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { GrpcMethod } from '@nestjs/microservices';
 import {
   User,
@@ -7,82 +7,92 @@ import {
   UpdateUserRequest,
   DeleteUserRequest,
   DeleteUserResponse,
+  GetUserByIdResponse,
+  CreateUserResponse,
+  UpdateUserResponse,
 } from '@app/proto-definitions/generated/user/user';
+import { InjectRepository } from '@nestjs/typeorm';
+import { UserEntity } from './entities/user.entity';
+import { Repository } from 'typeorm';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UserController {
-  private users: User[] = []; // Dữ liệu giả định
-
-  constructor() {
-    // Thêm một vài người dùng giả định
-    this.users.push({
-      id: '1',
-      username: 'john_doe',
-      email: 'john@example.com',
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-    });
-    this.users.push({
-      id: '2',
-      username: 'jane_smith',
-      email: 'jane@example.com',
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-    });
-  }
+  constructor(
+    @InjectRepository(UserEntity)
+    private readonly userRepo: Repository<UserEntity>,
+  ) {}
 
   @GrpcMethod('UserService', 'GetUserById')
-  getUserById(data: GetUserByIdRequest): User {
-    console.log('GetUserById called with ID:', data.id);
-    const user = this.users.find((u) => u.id === data.id);
-    if (!user) {
-      // Throw an error for gRPC to handle properly
-      throw new Error(`User with ID ${data.id} not found.`);
-    }
-    return user;
+  async getUserById(data: GetUserByIdRequest): Promise<GetUserByIdResponse> {
+    console.log('getUserById', data);
+    const user = await this.userRepo.findOne({
+      where: {
+        id: data.id,
+      },
+    });
+    return {
+      user: user && {
+        id: user.id,
+        username: user.username,
+        email: user.email,
+        createdAt: user.createdAt.toISOString(),
+        updatedAt: user.updatedAt.toISOString(),
+      },
+    };
   }
 
   @GrpcMethod('UserService', 'CreateUser')
-  createUser(data: CreateUserRequest): User {
-    console.log('CreateUser called with data:', data);
-    const newUser: User = {
-      id: (this.users.length + 1).toString(),
+  async createUser(data: CreateUserRequest): Promise<CreateUserResponse> {
+    const hashedPassword = await bcrypt.hash(data.password, 10);
+    const newUser = await this.userRepo.save({
       username: data.username,
       email: data.email,
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
+      passwordHash: hashedPassword,
+    });
+    return {
+      user: {
+        id: newUser.id,
+        username: newUser.username,
+        email: newUser.email,
+        createdAt: newUser.createdAt.toISOString(),
+        updatedAt: newUser.updatedAt.toISOString(),
+      },
     };
-    this.users.push(newUser);
-    return newUser;
   }
 
   @GrpcMethod('UserService', 'UpdateUser')
-  updateUser(data: UpdateUserRequest): User {
-    console.log('UpdateUser called with data:', data);
-    const index = this.users.findIndex((u) => u.id === data.id);
-    if (index === -1) {
-      throw new Error(`User with ID ${data.id} not found for update.`);
+  async updateUser(data: UpdateUserRequest): Promise<UpdateUserResponse> {
+    const userEntity = await this.userRepo.findOne({ where: { id: data.id } });
+    if (!userEntity) {
+      return {
+        user: undefined,
+      };
     }
-    const updatedUser = { ...this.users[index] };
     if (data.username) {
-      updatedUser.username = data.username;
+      userEntity.username = data.username;
     }
     if (data.email) {
-      updatedUser.email = data.email;
+      userEntity.email = data.email;
     }
-    updatedUser.updatedAt = new Date().toISOString();
-    this.users[index] = updatedUser;
-    return updatedUser;
+    const updatedUser = await this.userRepo.save(userEntity);
+    return {
+      user: {
+        id: updatedUser.id,
+        username: updatedUser.username,
+        email: updatedUser.email,
+        createdAt: updatedUser.createdAt.toISOString(),
+        updatedAt: updatedUser.updatedAt.toISOString(),
+      },
+    };
   }
 
   @GrpcMethod('UserService', 'DeleteUser')
-  deleteUser(data: DeleteUserRequest): DeleteUserResponse {
-    console.log('DeleteUser called with ID:', data.id);
-    const initialLength = this.users.length;
-    this.users = this.users.filter((u) => u.id !== data.id);
-    if (this.users.length < initialLength) {
-      return { success: true, message: `User ${data.id} deleted successfully.` };
+  async deleteUser(data: DeleteUserRequest): Promise<DeleteUserResponse> {
+    const deleteResult = await this.userRepo.delete(data.id);
+    if (deleteResult.affected === 0) {
+      return { success: false, message: `User ${data.id} not found.` };
     }
-    return { success: false, message: `User ${data.id} not found.` };
+    return { success: true, message: `User ${data.id} deleted successfully.` };
   }
 }
