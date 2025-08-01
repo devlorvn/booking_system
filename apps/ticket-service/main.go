@@ -6,24 +6,31 @@ import (
 	"log"
 	"net"
 
+	"github.com/redis/go-redis/v9"
 	"google.golang.org/grpc"
 
-	pb "booking-system/ticket-service/proto/src/user"
+	pbTicket "booking-system/ticket-service/proto/src/ticket"
+	pbUser "booking-system/ticket-service/proto/src/user"
 )
 
 const (
-	port = ":50052"
+	port        = ":50052"
+	redisAddr   = "localhost:6379"
+	ticketCount = 100
+	eventId     = "event_123"
 )
 
 type server struct {
-	pb.UnimplementedUserServiceServer
+	pbUser.UnimplementedUserServiceServer
+	pbTicket.UnimplementedTicketServiceServer
+	redisClient *redis.Client
 }
 
-func (s *server) GetUserById(ctx context.Context, in *pb.GetUserByIdRequest) (*pb.GetUserByIdResponse, error) {
+func (s *server) GetUserById(ctx context.Context, in *pbUser.GetUserByIdRequest) (*pbUser.GetUserByIdResponse, error) {
 	log.Printf("Receiver: %v", in.GetId())
 	if in.GetId() == "1" {
-		return &pb.GetUserByIdResponse{
-			User: &pb.User{
+		return &pbUser.GetUserByIdResponse{
+			User: &pbUser.User{
 				Id:        "1",
 				Username:  "go_user_1",
 				Email:     "go_user_1@example.com",
@@ -35,11 +42,11 @@ func (s *server) GetUserById(ctx context.Context, in *pb.GetUserByIdRequest) (*p
 	return nil, fmt.Errorf("user not found: %v", in.GetId())
 }
 
-func (s *server) CreateUser(ctx context.Context, in *pb.CreateUserRequest) (*pb.CreateUserResponse, error) {
+func (s *server) CreateUser(ctx context.Context, in *pbUser.CreateUserRequest) (*pbUser.CreateUserResponse, error) {
 	log.Printf("Creating user: %v", in.GetUsername())
 	// TODO: Implement user creation logic
-	return &pb.CreateUserResponse{
-		User: &pb.User{
+	return &pbUser.CreateUserResponse{
+		User: &pbUser.User{
 			Id:        "new_id",
 			Username:  in.GetUsername(),
 			Email:     in.GetEmail(),
@@ -49,11 +56,11 @@ func (s *server) CreateUser(ctx context.Context, in *pb.CreateUserRequest) (*pb.
 	}, nil
 }
 
-func (s *server) UpdateUser(ctx context.Context, in *pb.UpdateUserRequest) (*pb.UpdateUserResponse, error) {
+func (s *server) UpdateUser(ctx context.Context, in *pbUser.UpdateUserRequest) (*pbUser.UpdateUserResponse, error) {
 	log.Printf("Updating user: %v", in.GetId())
 	// TODO: Implement user update logic
-	return &pb.UpdateUserResponse{
-		User: &pb.User{
+	return &pbUser.UpdateUserResponse{
+		User: &pbUser.User{
 			Id:        in.GetId(),
 			Username:  in.GetUsername(),
 			Email:     in.GetEmail(),
@@ -63,10 +70,10 @@ func (s *server) UpdateUser(ctx context.Context, in *pb.UpdateUserRequest) (*pb.
 	}, nil
 }
 
-func (s *server) DeleteUser(ctx context.Context, in *pb.DeleteUserRequest) (*pb.DeleteUserResponse, error) {
+func (s *server) DeleteUser(ctx context.Context, in *pbUser.DeleteUserRequest) (*pbUser.DeleteUserResponse, error) {
 	log.Printf("Deleting user: %v", in.GetId())
 	// TODO: Implement user deletion logic
-	return &pb.DeleteUserResponse{
+	return &pbUser.DeleteUserResponse{
 		Success: true,
 		Message: fmt.Sprintf("User %s deleted successfully", in.GetId()),
 	}, nil
@@ -79,7 +86,7 @@ func main() {
 	}
 	s := grpc.NewServer()
 
-	pb.RegisterUserServiceServer(s, &server{})
+	pbUser.RegisterUserServiceServer(s, &server{})
 	log.Printf("Ticket Service (Go gRPC) listening on %v", lis.Addr())
 	if err := s.Serve(lis); err != nil {
 		log.Fatalf("failed to serve: %v", err)

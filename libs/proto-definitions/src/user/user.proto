@@ -2,9 +2,7 @@ syntax = "proto3";
 
 package user; // Tên package cho các định nghĩa trong file này
 
-// --- THÊM DÒNG NÀY ---
 option go_package = "booking-system/ticket-service/proto/user;user";
-// --- KẾT THÚC THÊM ---
 
 service UserService {
   rpc GetUserById (GetUserByIdRequest) returns (GetUserByIdResponse);

@@ -21,7 +21,6 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
-// Định nghĩa tin nhắn (message) cho User
 type User struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
@@ -98,7 +97,6 @@ func (x *User) GetUpdatedAt() string {
 	return ""
 }
 
-// Định nghĩa tin nhắn yêu cầu GetUserById
 type GetUserByIdRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
@@ -143,7 +141,6 @@ func (x *GetUserByIdRequest) GetId() string {
 	return ""
 }
 
-// Định nghĩa tin nhắn phản hồi GetUserById
 type GetUserByIdResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	User          *User                  `protobuf:"bytes,1,opt,name=user,proto3" json:"user,omitempty"`
@@ -188,12 +185,11 @@ func (x *GetUserByIdResponse) GetUser() *User {
 	return nil
 }
 
-// Định nghĩa tin nhắn yêu cầu CreateUser
 type CreateUserRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Username      string                 `protobuf:"bytes,1,opt,name=username,proto3" json:"username,omitempty"`
 	Email         string                 `protobuf:"bytes,2,opt,name=email,proto3" json:"email,omitempty"`
-	Password      string                 `protobuf:"bytes,3,opt,name=password,proto3" json:"password,omitempty"` // Mật khẩu sẽ được hash ở backend
+	Password      string                 `protobuf:"bytes,3,opt,name=password,proto3" json:"password,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -249,7 +245,6 @@ func (x *CreateUserRequest) GetPassword() string {
 	return ""
 }
 
-// Định nghĩa tin nhắn phản hồi CreateUser
 type CreateUserResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	User          *User                  `protobuf:"bytes,1,opt,name=user,proto3" json:"user,omitempty"`
@@ -294,11 +289,10 @@ func (x *CreateUserResponse) GetUser() *User {
 	return nil
 }
 
-// Định nghĩa tin nhắn yêu cầu UpdateUser
 type UpdateUserRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
-	Username      *string                `protobuf:"bytes,2,opt,name=username,proto3,oneof" json:"username,omitempty"` // optional cho phép trường này không bắt buộc
+	Username      *string                `protobuf:"bytes,2,opt,name=username,proto3,oneof" json:"username,omitempty"`
 	Email         *string                `protobuf:"bytes,3,opt,name=email,proto3,oneof" json:"email,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
@@ -355,7 +349,6 @@ func (x *UpdateUserRequest) GetEmail() string {
 	return ""
 }
 
-// Định nghĩa tin nhắn phản hồi UpdateUser
 type UpdateUserResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	User          *User                  `protobuf:"bytes,1,opt,name=user,proto3" json:"user,omitempty"`
@@ -400,7 +393,6 @@ func (x *UpdateUserResponse) GetUser() *User {
 	return nil
 }
 
-// Định nghĩa tin nhắn yêu cầu DeleteUser
 type DeleteUserRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
@@ -445,7 +437,6 @@ func (x *DeleteUserRequest) GetId() string {
 	return ""
 }
 
-// Định nghĩa tin nhắn phản hồi DeleteUser
 type DeleteUserResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Success       bool                   `protobuf:"varint,1,opt,name=success,proto3" json:"success,omitempty"`

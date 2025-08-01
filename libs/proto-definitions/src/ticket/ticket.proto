@@ -1,0 +1,74 @@
+syntax = "proto3";
+
+package ticket;
+
+option go_package = "booking-system/ticket-service/proto/ticket;ticket";
+
+service TicketService {
+  rpc GetAvailableTickets (GetAvailableTicketsRequest) returns (GetAvailableTicketsResponse);
+  rpc HoldTicket (HoldTicketRequest) returns (HoldTicketResponse);
+  rpc ReleaseTicket (ReleaseTicketRequest) returns (ReleaseTicketResponse);
+  rpc ConfirmTicketPurchase (ConfirmTicketPurchaseRequest) returns (ConfirmTicketPurchaseResponse);
+}
+
+message Ticket {
+  string id = 1;
+  string eventId = 2;
+  string seatNumber = 3;
+  double price = 4;
+  TicketStatus status = 5;
+  string heldByUserId = 6;
+  string heldUntil = 7;
+  string purchasedByUserId = 8;
+  string createdAt = 9;
+  string updatedAt = 10;
+}
+
+enum TicketStatus {
+  TICKET_STATUS_UNSPECIFIED = 0;
+  TICKET_STATUS_AVAILABLE = 1;
+  TICKET_STATUS_HELD = 2;
+  TICKET_STATUS_SOLD = 3;
+}
+
+message GetAvailableTicketsRequest {
+  string eventId = 1;
+}
+
+message GetAvailableTicketsResponse {
+  repeated Ticket tickets = 1;
+}
+
+// Yêu cầu giữ vé
+message HoldTicketRequest {
+  string ticketId = 1;
+  string userId = 2;
+  int32 holdDurationSeconds = 3; // Thời gian giữ vé
+}
+
+message HoldTicketResponse {
+  bool success = 1;
+  string message = 2;
+  optional Ticket ticket = 3; 
+}
+
+message ReleaseTicketRequest {
+  string ticketId = 1;
+  string userId = 2;
+}
+
+message ReleaseTicketResponse {
+  bool success = 1;
+  string message = 2;
+}
+
+message ConfirmTicketPurchaseRequest {
+  string ticketId = 1;
+  string userId = 2;
+}
+
+message ConfirmTicketPurchaseResponse {
+  bool success = 1;
+  string message = 2;
+  optional Ticket ticket = 3; // Thông tin vé sau khi mua
+}

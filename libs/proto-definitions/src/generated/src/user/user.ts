@@ -23,7 +23,6 @@ import { Observable } from "rxjs";
 
 export const protobufPackage = "user";
 
-/** Định nghĩa tin nhắn (message) cho User */
 export interface User {
   id: string;
   username: string;
@@ -32,48 +31,38 @@ export interface User {
   updatedAt: string;
 }
 
-/** Định nghĩa tin nhắn yêu cầu GetUserById */
 export interface GetUserByIdRequest {
   id: string;
 }
 
-/** Định nghĩa tin nhắn phản hồi GetUserById */
 export interface GetUserByIdResponse {
   user: User | undefined;
 }
 
-/** Định nghĩa tin nhắn yêu cầu CreateUser */
 export interface CreateUserRequest {
   username: string;
   email: string;
-  /** Mật khẩu sẽ được hash ở backend */
   password: string;
 }
 
-/** Định nghĩa tin nhắn phản hồi CreateUser */
 export interface CreateUserResponse {
   user: User | undefined;
 }
 
-/** Định nghĩa tin nhắn yêu cầu UpdateUser */
 export interface UpdateUserRequest {
   id: string;
-  /** optional cho phép trường này không bắt buộc */
   username?: string | undefined;
   email?: string | undefined;
 }
 
-/** Định nghĩa tin nhắn phản hồi UpdateUser */
 export interface UpdateUserResponse {
   user: User | undefined;
 }
 
-/** Định nghĩa tin nhắn yêu cầu DeleteUser */
 export interface DeleteUserRequest {
   id: string;
 }
 
-/** Định nghĩa tin nhắn phản hồi DeleteUser */
 export interface DeleteUserResponse {
   success: boolean;
   message: string;
@@ -513,8 +502,6 @@ export const DeleteUserResponse: MessageFns<DeleteUserResponse> = {
   },
 };
 
-/** Định nghĩa dịch vụ User Service */
-
 export interface UserServiceClient {
   getUserById(request: GetUserByIdRequest, metadata?: Metadata): Observable<GetUserByIdResponse>;
 
@@ -524,8 +511,6 @@ export interface UserServiceClient {
 
   deleteUser(request: DeleteUserRequest, metadata?: Metadata): Observable<DeleteUserResponse>;
 }
-
-/** Định nghĩa dịch vụ User Service */
 
 export interface UserServiceController {
   getUserById(
@@ -566,7 +551,6 @@ export function UserServiceControllerMethods() {
 
 export const USER_SERVICE_NAME = "UserService";
 
-/** Định nghĩa dịch vụ User Service */
 export type UserServiceService = typeof UserServiceService;
 export const UserServiceService = {
   getUserById: {

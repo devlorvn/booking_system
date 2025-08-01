@@ -28,8 +28,6 @@ const (
 // UserServiceClient is the client API for UserService service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
-//
-// Định nghĩa dịch vụ User Service
 type UserServiceClient interface {
 	GetUserById(ctx context.Context, in *GetUserByIdRequest, opts ...grpc.CallOption) (*GetUserByIdResponse, error)
 	CreateUser(ctx context.Context, in *CreateUserRequest, opts ...grpc.CallOption) (*CreateUserResponse, error)
@@ -88,8 +86,6 @@ func (c *userServiceClient) DeleteUser(ctx context.Context, in *DeleteUserReques
 // UserServiceServer is the server API for UserService service.
 // All implementations should embed UnimplementedUserServiceServer
 // for forward compatibility.
-//
-// Định nghĩa dịch vụ User Service
 type UserServiceServer interface {
 	GetUserById(context.Context, *GetUserByIdRequest) (*GetUserByIdResponse, error)
 	CreateUser(context.Context, *CreateUserRequest) (*CreateUserResponse, error)
